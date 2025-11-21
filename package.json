@@ -1,0 +1,126 @@
+{
+  "name": "apple2ts-studio",
+  "displayName": "Apple2TS Studio",
+  "description": "6502 Assembly IDE with integrated Apple IIe emulator",
+  "version": "0.1.0",
+  "publisher": "ct6502",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ct6502/apple2ts-studio.git"
+  },
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Debuggers",
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:asm6502",
+    "onCommand:apple2ts.launchEmulator"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "asm6502",
+        "aliases": [
+          "6502 Assembly",
+          "asm6502"
+        ],
+        "extensions": [
+          ".s",
+          ".asm",
+          ".a65"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "asm6502",
+        "scopeName": "source.assembly.6502",
+        "path": "./syntaxes/asm6502.tmGrammar.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "apple2ts.launchEmulator",
+        "title": "Launch Apple IIe Emulator",
+        "category": "Apple2TS"
+      },
+      {
+        "command": "apple2ts.buildAndRun",
+        "title": "Build & Run in Emulator",
+        "category": "Apple2TS"
+      },
+      {
+        "command": "apple2ts.assembleFile",
+        "title": "Assemble Current File",
+        "category": "Apple2TS"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "apple2ts.buildAndRun",
+        "key": "f5",
+        "when": "resourceExtname == .s || resourceExtname == .asm || resourceExtname == .a65"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "apple2ts.buildAndRun",
+          "when": "resourceExtname == .s || resourceExtname == .asm || resourceExtname == .a65",
+          "group": "apple2ts"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Apple2TS Studio",
+      "properties": {
+        "apple2ts.assembler.path": {
+          "type": "string",
+          "default": "64tass",
+          "description": "Path to the 6502 assembler (64tass)"
+        },
+        "apple2ts.assembler.args": {
+          "type": "string",
+          "default": "-a -b -C --m65c02",
+          "description": "Additional arguments for 64tass assembler"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run download-apple2ts && npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "build-emulator": "node scripts/build-emulator.js",
+    "download-apple2ts": "npx ts-node scripts/download-apple2ts.ts",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.74.0",
+    "@types/node": "16.x",
+    "@typescript-eslint/eslint-plugin": "^5.45.0",
+    "@typescript-eslint/parser": "^5.45.0",
+    "eslint": "^8.28.0",
+    "typescript": "^4.9.4",
+    "@vscode/test-electron": "^2.2.0",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4",
+    "copy-webpack-plugin": "^11.0.0",
+    "html-webpack-plugin": "^5.5.4",
+    "css-loader": "^6.8.1",
+    "style-loader": "^3.3.3",
+    "ts-loader": "^9.5.1"
+  },
+  "dependencies": {
+    "@vscode/vsce": "^3.7.0"
+  }
+}
