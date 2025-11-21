@@ -23,6 +23,4 @@ coverage/
 *.tsbuildinfo
 
 # Downloaded Apple2TS files
-apple2ts-dist/
-media/apple2ts/
-temp-apple2ts/
+examples/*.bin

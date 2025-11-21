@@ -87,7 +87,7 @@
         },
         "apple2ts.assembler.args": {
           "type": "string",
-          "default": "-a -b -C --m65c02",
+          "default": "-a --apple-ii -C --m65c02",
           "description": "Additional arguments for 64tass assembler"
         }
       }

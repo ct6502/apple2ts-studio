@@ -7,9 +7,13 @@ export class EmulatorPanel {
   private panel: vscode.WebviewPanel | undefined
   private disposables: vscode.Disposable[] = []
   private extensionUri: vscode.Uri
+  private address = 0x0300
+  private binary: Uint8Array = new Uint8Array()
+  private outputChannel: vscode.OutputChannel
 
-  constructor(extensionUri: vscode.Uri) {
+  constructor(extensionUri: vscode.Uri, outputChannel: vscode.OutputChannel) {
     this.extensionUri = extensionUri
+    this.outputChannel = outputChannel
   }
 
   public createOrShow(context: vscode.ExtensionContext) {
@@ -65,13 +69,15 @@ export class EmulatorPanel {
     )
   }
 
-  public loadProgram(binary: Uint8Array) {
-    if (this.panel) {
-      this.panel.webview.postMessage({
-        command: 'loadProgram',
-        data: Array.from(binary)
-      })
-    }
+  public loadProgram(address: number, binary: Uint8Array) {
+    this.address = address
+    this.binary = binary
+    // if (this.panel) {
+    //   this.panel.webview.postMessage({
+    //     command: 'loadProgram',
+    //     data: Array.from(binary)
+    //   })
+    // }
   }
 
   public dispose() {
@@ -96,6 +102,16 @@ export class EmulatorPanel {
   }
 
   private getHtmlForWebview(webview: vscode.Webview, context: vscode.ExtensionContext): string {
+
+    let binaryString = ""
+    for (let i = 0; i < this.binary.length; i++) {
+      binaryString += String.fromCharCode(this.binary[i])
+    }
+    const base64 = btoa(binaryString)
+    const addrHex = this.address.toString(16)
+    const url = `https://apple2ts.com?appmode=game&theme=dark&address=0x${addrHex}&binary=${base64}`
+    this.outputChannel.appendLine(`URL: ${url}`)
+
     return `<!DOCTYPE html>
       <html lang="en">
       <head>
@@ -113,7 +129,7 @@ export class EmulatorPanel {
       <body>
         <iframe 
           class="emulator-frame"
-          src="https://apple2ts.com?appmode=game&theme=dark"
+          src="${url}"
           title="Apple2TS Emulator"
           allow="autoplay; clipboard-read; clipboard-write"
           sandbox="allow-scripts allow-same-origin allow-forms allow-downloads">
