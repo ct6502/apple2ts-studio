@@ -94,11 +94,9 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "npm run download-apple2ts && npm run compile",
+    "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "build-emulator": "node scripts/build-emulator.js",
-    "download-apple2ts": "npx ts-node scripts/download-apple2ts.ts",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
     "test": "node ./out/test/runTest.js",
