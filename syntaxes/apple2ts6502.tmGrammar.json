@@ -33,8 +33,12 @@
     "labels": {
       "patterns": [
         {
-          "name": "entity.name.label.assembly",
+          "name": "entity.name.tag",
           "match": "^\\s*[a-zA-Z_][a-zA-Z0-9_]*:"
+        },
+        {
+          "name": "entity.name.tag.local",
+          "match": "^\\s*@[a-zA-Z_][a-zA-Z0-9_]*:"
         }
       ]
     },
@@ -42,18 +46,22 @@
       "patterns": [
         {
           "name": "keyword.mnemonic.assembly",
-          "match": "\\b(?i)(ADC|AND|ASL|BCC|BCS|BEQ|BIT|BMI|BNE|BPL|BRK|BVC|BVS|CLC|CLD|CLI|CLV|CMP|CPX|CPY|DEC|DEX|DEY|EOR|INC|INX|INY|JMP|JSR|LDA|LDX|LDY|LSR|NOP|ORA|PHA|PHP|PLA|PLP|ROL|ROR|RTI|RTS|SBC|SEC|SED|SEI|STA|STX|STY|TAX|TAY|TSX|TXA|TXS|TYA)\\b"
+          "match": "\\b(?i)(ADC|AND|ASL|BCC|BCS|BEQ|BIT|BMI|BNE|BPL|BRA|BRK|BVC|BVS|CLC|CLD|CLI|CLV|CMP|CPX|CPY|DEC|DEX|DEY|EOR|INC|INX|INY|JMP|JSR|LDA|LDX|LDY|LSR|NOP|ORA|PHA|PHP|PHX|PHY|PLA|PLP|PLX|PLY|ROL|ROR|RTI|RTS|SBC|SEC|SED|SEI|STA|STX|STY|STZ|TAX|TAY|TRB|TSB|TSX|TXA|TXS|TYA)\\b"
         }
       ]
     },
     "directives": {
       "patterns": [
         {
-          "name": "keyword.directive.assembly",
-          "match": "\\.(org|byte|word|text|include|proc|endproc|macro|endmacro|if|ifdef|ifndef|endif)\\b"
+          "name": "keyword.directive.ca65.assembly",
+          "match": "\\.(setcpu|zeropage|segment|res|byte|word|addr|dbyt|text|include|proc|endproc|macro|endmacro|if|ifdef|ifndef|endif|org|scope|endscope)\\b"
         },
         {
           "name": "keyword.directive.64tass.assembly",
+          "match": "\\.(org|byte|word|text|include|proc|endproc|macro|endmacro|if|ifdef|ifndef|endif)\\b"
+        },
+        {
+          "name": "keyword.directive.64tass.assignment.assembly",
           "match": "\\*\\s*="
         }
       ]

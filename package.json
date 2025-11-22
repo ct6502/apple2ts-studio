@@ -16,18 +16,15 @@
     "Debuggers",
     "Other"
   ],
-  "activationEvents": [
-    "onLanguage:asm6502",
-    "onCommand:apple2ts.launchEmulator"
-  ],
+  "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
     "languages": [
       {
-        "id": "asm6502",
+        "id": "apple2ts6502",
         "aliases": [
-          "6502 Assembly",
-          "asm6502"
+          "Apple2TS 6502 Assembly",
+          "apple2ts6502"
         ],
         "extensions": [
           ".s",
@@ -39,15 +36,15 @@
     ],
     "grammars": [
       {
-        "language": "asm6502",
+        "language": "apple2ts6502",
         "scopeName": "source.assembly.6502",
-        "path": "./syntaxes/asm6502.tmGrammar.json"
+        "path": "./syntaxes/apple2ts6502.tmGrammar.json"
       }
     ],
     "commands": [
       {
         "command": "apple2ts.launchEmulator",
-        "title": "Launch Apple IIe Emulator",
+        "title": "Launch Apple2TS Emulator",
         "category": "Apple2TS"
       },
       {

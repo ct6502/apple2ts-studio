@@ -31,7 +31,7 @@ export function activate(context: vscode.ExtensionContext) {
       return
     }
 
-    if (activeEditor.document.languageId !== 'asm6502') {
+    if (activeEditor.document.languageId !== 'apple2ts6502') {
       vscode.window.showWarningMessage('Current file is not a 6502 assembly file. Make sure the file has extension .s, .asm, or .a65')
       return
     }
@@ -61,7 +61,7 @@ export function activate(context: vscode.ExtensionContext) {
       return
     }
 
-    if (activeEditor.document.languageId !== 'asm6502') {
+    if (activeEditor.document.languageId !== 'apple2ts6502') {
       vscode.window.showWarningMessage('Current file is not a 6502 assembly file')
       return
     }
@@ -86,7 +86,7 @@ export function activate(context: vscode.ExtensionContext) {
   const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100)
   statusBarItem.text = "$(play) Apple2TS"
   statusBarItem.command = 'apple2ts.launchEmulator'
-  statusBarItem.tooltip = 'Launch Apple IIe Emulator'
+  statusBarItem.tooltip = 'Launch Apple2TS Emulator'
   statusBarItem.show()
   context.subscriptions.push(statusBarItem)
 }
