@@ -62,8 +62,10 @@ export class AssemblerService {
 
     // Read the binary file
     let binary = await fs.promises.readFile(binaryPath)
+    // Since we used --apple-ii, the first four bytes have the load address and
+    // the data length (always equal to 1). Retrieve the address and strip the header.
     const address = binary[0] + (binary[1] << 8)
-    binary = binary.slice(4) // Skip the first four bytes
+    binary = binary.slice(4)
     
     this.outputChannel.appendLine(`Successfully generated ${binary.length} bytes`)
     

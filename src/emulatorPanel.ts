@@ -107,9 +107,12 @@ export class EmulatorPanel {
 
   private getHtmlForWebview(webview: vscode.Webview, context: vscode.ExtensionContext): string {
     // Start with basic URL without binary data
-    const baseURL = "localhost:6502" // "apple2ts.com"
+    const baseURL = "apple2ts.com" // "localhost:6502"
     const protocol = baseURL.includes('localhost') ? 'http' : 'https'
-    const url = `${protocol}://${baseURL}?appmode=game&theme=dark`
+    const config = vscode.workspace.getConfiguration('apple2ts')
+    const appMode = config.get<string>('emulator.appmode', 'game')
+    const theme = config.get<string>('emulator.theme', 'dark')
+    const url = `${protocol}://${baseURL}?appmode=${appMode}&theme=${theme}`
     const origin = `${protocol}://${baseURL}`
     this.outputChannel.appendLine(`URL: ${url}`)
     this.outputChannel.appendLine(`Origin: ${origin}`)

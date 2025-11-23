@@ -78,6 +78,28 @@
     "configuration": {
       "title": "Apple2TS Studio",
       "properties": {
+        "apple2ts.emulator.theme": {
+          "type": "string",
+          "enum": [
+            "Classic",
+            "Dark"
+          ],
+          "default": [
+            "Dark"
+          ],
+          "description": "Apple2TS Emulator Theme"
+        },
+        "apple2ts.emulator.appmode": {
+          "type": "string",
+          "enum": [
+            "Game",
+            "Full"
+          ],
+          "default": [
+            "Game"
+          ],
+          "description": "Apple2TS Emulator Application Mode"
+        },
         "apple2ts.assembler.path": {
           "type": "string",
           "default": "64tass",
