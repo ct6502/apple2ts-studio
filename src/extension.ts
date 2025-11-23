@@ -44,7 +44,7 @@ export function activate(context: vscode.ExtensionContext) {
       const [address, binary] = await assemblerService.assembleFile(activeEditor.document.uri)
       
       // Show emulator and load the program
-      emulatorPanel.loadProgram(address, binary)
+      emulatorPanel.loadProgram(address, binary, "bin")
       emulatorPanel.createOrShow(context)
       
       vscode.window.showInformationMessage(`Program assembled successfully! ${binary.length} bytes loaded into emulator.`)
