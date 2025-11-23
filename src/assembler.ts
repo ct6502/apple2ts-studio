@@ -30,7 +30,7 @@ export class AssemblerService {
       // Get assembler path and arguments from configuration
       const config = vscode.workspace.getConfiguration('apple2ts')
       const assemblerPath = config.get<string>('assembler.path', '64tass')
-      const assemblerArgs = config.get<string>('assembler.args', '-a --apple-ii -C --m65c02')
+      const assemblerArgs = config.get<string>('assembler.args', '-a --apple-ii --m65c02')
 
       this.outputChannel.appendLine(`Assembling: ${sourcePath}`)
 

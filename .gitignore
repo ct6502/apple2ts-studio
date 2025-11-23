@@ -22,5 +22,5 @@ coverage/
 .vscode-test
 *.tsbuildinfo
 
-# Downloaded Apple2TS files
-examples/*.bin
+# Compiled 6502 files
+*.bin

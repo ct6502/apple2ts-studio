@@ -1,4 +1,5 @@
 import * as vscode from 'vscode'
+import * as zlib from 'zlib'
 
 export class EmulatorPanel {
   public static currentPanel: EmulatorPanel | undefined
@@ -102,14 +103,30 @@ export class EmulatorPanel {
   }
 
   private getHtmlForWebview(webview: vscode.Webview, context: vscode.ExtensionContext): string {
+    let dataToEncode = this.binary
+    let compressionHeader = ''
 
-    let binaryString = ""
-    for (let i = 0; i < this.binary.length; i++) {
-      binaryString += String.fromCharCode(this.binary[i])
+    // Try compression if binary is large enough to benefit
+    try {
+      const compressed = zlib.gzipSync(this.binary)
+      // Only use compression if it actually saves space
+//        if (compressed.length < this.binary.length * 0.9) {
+        dataToEncode = compressed
+        compressionHeader = 'GZIP'
+        this.outputChannel.appendLine(`Compressed ${this.binary.length} bytes to ${compressed.length} bytes`)
+//        }
+    } catch (_) {
+    }
+
+    // Convert to binary string and encode
+    let binaryString = ''
+    for (let i = 0; i < dataToEncode.length; i++) {
+      binaryString += String.fromCharCode(dataToEncode[i])
     }
     const base64 = btoa(binaryString)
+    const encodedBase64 = compressionHeader + encodeURIComponent(base64)
     const addrHex = this.address.toString(16)
-    const url = `https://apple2ts.com?appmode=game&theme=dark&address=0x${addrHex}&binary=${base64}`
+    const url = `https://apple2ts.com?appmode=game&theme=dark&address=0x${addrHex}&binary=${encodedBase64}`
     this.outputChannel.appendLine(`URL: ${url}`)
 
     return `<!DOCTYPE html>

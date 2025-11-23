@@ -4,6 +4,7 @@
   "description": "6502 Assembly IDE with integrated Apple IIe emulator",
   "version": "0.1.0",
   "publisher": "ct6502",
+  "icon": "assets/icon.png",
   "repository": {
     "type": "git",
     "url": "https://github.com/ct6502/apple2ts-studio.git"
@@ -84,7 +85,7 @@
         },
         "apple2ts.assembler.args": {
           "type": "string",
-          "default": "-a --apple-ii -C --m65c02",
+          "default": "-a --apple-ii --m65c02",
           "description": "Additional arguments for 64tass assembler"
         }
       }

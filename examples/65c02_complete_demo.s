@@ -3,24 +3,24 @@
 ; This program demonstrates every 65C02 instruction and addressing mode
 ;================================
 
-.setcpu "65C02"
+.cpu "65c02"
 
 ; Zero page variables
-.zeropage
-zp_var1:    .res 1      ; $00
-zp_var2:    .res 1      ; $01
-zp_ptr:     .res 2      ; $02-$03
-zp_temp:    .res 1      ; $04
+*= $00
+zp_var1     .byte ?      ; $00
+zp_var2     .byte ?      ; $01
+zp_ptr      .word ?      ; $02-$03
+zp_temp     .byte ?      ; $04
 
-; RAM variables
-.segment "BSS"
-ram_var1:   .res 1
-ram_var2:   .res 1
-ram_table:  .res 16
-ram_ptr:    .res 2
+; RAM variables  
+*= $0300
+ram_var1    .byte ?
+ram_var2    .byte ?
+ram_table   .fill 16, 0
+ram_ptr     .word ?
 
 ; Code segment
-.segment "CODE"
+*= $0800
 
 main:
     ; Initialize some test values
@@ -421,24 +421,40 @@ test_bits_demo:
     ; WAI                   ; Wait for Interrupt (commented out)
     ; STP                   ; Stop processor (commented out)
 
-;================================
-; End of demonstration
-;================================
-end_demo:
-    JMP end_demo            ; Infinite loop
 
-;================================
-; Data section
-;================================
-.segment "RODATA"
-test_data:
-    .byte $00, $11, $22, $33, $44, $55, $66, $77
-    .byte $88, $99, $AA, $BB, $CC, $DD, $EE, $FF
+        lda #$48        ; Load 'H' into accumulator
+        sta $0400       ; Store to screen memory (top-left corner)
+        
+        lda #$45        ; Load 'E' into accumulator  
+        sta $0401       ; Store to next screen position
+        
+        lda #$4c        ; Load 'L' into accumulator
+        sta $0402       ; Store to screen
+        
+        lda #$4c        ; Load 'L' into accumulator
+        sta $0403       ; Store to screen
+        
+        lda #$4f        ; Load 'O' into accumulator
+        sta $0404       ; Store to screen
+        
+        lda #$20        ; Load space character
+        sta $0405       ; Store to screen
+        
+        lda #$57        ; Load 'W' into accumulator
+        sta $0406       ; Store to screen
+        
+        lda #$4f        ; Load 'O' into accumulator
+        sta $0407       ; Store to screen
+        
+        lda #$52        ; Load 'R' into accumulator
+        sta $0408       ; Store to screen
+        
+        lda #$4c        ; Load 'L' into accumulator
+        sta $0409       ; Store to screen
+        
+        lda #$44        ; Load 'D' into accumulator
+        sta $040a       ; Store to screen
 
-;================================
-; Interrupt vectors (if needed)
-;================================
-.segment "VECTORS"
-    .word $0000             ; NMI vector
-    .word main              ; RESET vector  
-    .word $0000             ; IRQ/BRK vector
+loop:
+        nop             ; No operation
+        jmp loop        ; Infinite loop
