@@ -21,7 +21,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   // Register commands
   const launchEmulatorCommand = vscode.commands.registerCommand('apple2ts.launchEmulator', () => {
-    emulatorPanel.createOrShow(context)
+    emulatorPanel.createOrShow(context, false)
   })
 
   const buildAndRunCommand = vscode.commands.registerCommand('apple2ts.buildAndRun', async () => {
@@ -45,7 +45,7 @@ export function activate(context: vscode.ExtensionContext) {
       
       // Show emulator and load the program
       emulatorPanel.loadProgram(address, binary, "bin")
-      emulatorPanel.createOrShow(context)
+      emulatorPanel.createOrShow(context, true)
       
       vscode.window.showInformationMessage(`Program assembled successfully! ${binary.length} bytes loaded into emulator.`)
     } catch (error) {

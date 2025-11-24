@@ -8,17 +8,17 @@ A Visual Studio Code extension for 6502 assembly programming with an integrated 
   - Syntax highlighting for 6502 assembly
   - IntelliSense with instruction completion
   - Hover documentation for instructions
-  - Apple II specific memory addresses completion
+  - Apple II specific memory address completion
 
 - **Integrated Apple IIe Emulator**
-  - Built-in Apple IIe emulator in VS Code
+  - Built-in Apple IIe emulator via [Apple2TS](https://github.com/ct6502/apple2ts)
   - Load and run assembled programs directly
   - Visual debugging capabilities
   - Apple II specific features and memory mapping
 
 - **Build System**
   - Support for 64tass assembler toolchain
-  - Built-in simple assembler for basic programs
+  - Built-in simple assembler
   - F5 to build and run in emulator
   - Assembly output and error reporting
 
@@ -36,6 +36,9 @@ A Visual Studio Code extension for 6502 assembly programming with an integrated 
 For advanced assembly features, install the 64tass assembler:
 
 ```bash
+# macOS with MacPorts
+sudo port install 64tass
+
 # macOS with Homebrew
 brew install 64tass
 
@@ -74,7 +77,6 @@ start:
 1. Open a 6502 assembly file
 2. Press F5 or use Command Palette: "Apple2TS: Build & Run in Emulator"
 3. The emulator window will open and your program will be loaded
-4. Press 'R' in the emulator to run the program
 
 ### Commands
 
@@ -116,17 +118,16 @@ Configure the extension in VS Code settings:
 ```
 apple2ts-studio/
 ├── src/
-│   ├── extension.ts          # Main extension file
-│   ├── emulatorPanel.ts      # Webview-based emulator
 │   ├── assembler.ts          # Assembly toolchain integration
+│   ├── emulatorPanel.ts      # Webview-based emulator
+│   ├── extension.ts          # Main extension file
 │   └── languageFeatures.ts  # Language server features
 ├── syntaxes/
 │   └── asm6502.tmGrammar.json # Syntax highlighting
-├── media/
-│   ├── emulator.js           # Emulator implementation
-│   └── emulator.css          # Emulator styling
 └── examples/
     └── hello.s               # Sample assembly program
+    └── graphics.s            # Sample assembly program
+    └── 65c02_complete_demo.s # All 65c02 instructions and address modes
 ```
 
 ### Building
@@ -140,6 +141,40 @@ npm run compile
 
 ```bash
 npm run package
+```
+
+### Installing and Reload
+
+```bash
+code --install-extension *.vsix --force
+```
+
+## Update CHANGELOG
+
+Install the [Github Changelog Generator](https://github.com/github-changelog-generator/github-changelog-generator) by running:
+
+```sh
+gem install github_changelog_generator
+```
+
+You may need to update to Ruby v3.x to install this gem.
+
+Go through the commits, and add any missing tags. For a given commit sha (say `1befdec`), checkout the commit, force the date to be the commit date, and then add the tag:
+
+```sh
+git checkout 1befdec  # skip this if you want changelog for most recent code
+GIT_COMMITTER_DATE="$(git show --format=%aD | head -1)"
+git tag -a v0.9 -m"v0.9"  # bump this each time, and change it here as well
+git push origin --tags
+git checkout main
+```
+
+If you don't already have one, [generate a Github token](https://github.com/settings/tokens/new?description=GitHub%20Changelog%20Generator%20token) to run the Changelog Generator script with authentication. You only need "repo" scope for private repositories.
+
+Now run the script:
+
+```sh
+github_changelog_generator --token xxxxx -u ct6502 -p apple2ts
 ```
 
 ## Contributing

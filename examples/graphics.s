@@ -2,7 +2,7 @@
 ; Demonstrates lo-res graphics and color patterns
 ; Load at $0800 and JSR to start
 
-.org $0800
+* = $0800
 
 start:
     ; Switch to graphics mode
@@ -93,8 +93,8 @@ done:
     RTS
 
 message:
-    .byte "APPLE II ASSEMBLY DEMO", $00
-
+    .text "APPLE II ASSEMBLY DEMO"
+    .byte $00
 ; Memory locations for reference:
 ; $C050 - Graphics mode off
 ; $C051 - Graphics mode on

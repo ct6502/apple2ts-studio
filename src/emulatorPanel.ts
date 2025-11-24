@@ -19,7 +19,7 @@ export class EmulatorPanel {
     this.outputChannel = outputChannel
   }
 
-  public createOrShow(context: vscode.ExtensionContext) {
+  public createOrShow(context: vscode.ExtensionContext, loadCode: boolean) {
     const column = vscode.window.activeTextEditor
       ? vscode.ViewColumn.Beside
       : vscode.ViewColumn.One
@@ -69,7 +69,7 @@ export class EmulatorPanel {
     }
 
     // This will run whether the panel was created or already existed
-    this.update(context)
+    this.update(context, loadCode)
   }
 
   public loadProgram(address: number, binary: Uint8Array, format: string) {
@@ -98,14 +98,14 @@ export class EmulatorPanel {
     }
   }
 
-  private update(context: vscode.ExtensionContext) {
+  private update(context: vscode.ExtensionContext, loadCode: boolean) {
     if (this.panel) {
       const webview = this.panel.webview
-      this.panel.webview.html = this.getHtmlForWebview(webview, context)
+      this.panel.webview.html = this.getHtmlForWebview(webview, context, loadCode)
     }
   }
 
-  private getHtmlForWebview(webview: vscode.Webview, context: vscode.ExtensionContext): string {
+  private getHtmlForWebview(webview: vscode.Webview, context: vscode.ExtensionContext, loadCode: boolean): string {
     // Start with basic URL without binary data
     const baseURL = "apple2ts.com" // "localhost:6502"
     const protocol = baseURL.includes('localhost') ? 'http' : 'https'
@@ -118,33 +118,11 @@ export class EmulatorPanel {
     this.outputChannel.appendLine(`Origin: ${origin}`)
 
     // Prepare binary data for postMessage
-    const dataToSend = this.binary
-    const base64Data = Buffer.from(dataToSend).toString('base64')
-
-    return `<!DOCTYPE html>
-      <html lang="en">
-      <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Apple2TS Emulator</title>
-        <style>
-          .emulator-frame {
-            width: 100%;
-            height: calc(100vh - 40px);
-            border: none;
-          }
-        </style>
-      </head>
-      <body>
-        <iframe 
-          class="emulator-frame"
-          src="${url}"
-          title="Apple2TS Emulator"
-          allow="autoplay; clipboard-read; clipboard-write"
-          sandbox="allow-scripts allow-same-origin allow-forms allow-downloads">
-          <p>Your browser does not support iframes. Please visit <a href="https://apple2ts.com">apple2ts.com</a> directly.</p>
-        </iframe>
-        
+    let script = ''
+    if (loadCode) {
+      const dataToSend = this.binary
+      const base64Data = Buffer.from(dataToSend).toString('base64')
+      script = `
         <script>
           const iframe = document.querySelector('.emulator-frame');
           // Decode base64 back to Uint8Array
@@ -180,7 +158,33 @@ export class EmulatorPanel {
               }
             }
           });
-        </script>
+        </script>`
+    }
+
+    return `<!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Apple2TS Emulator</title>
+        <style>
+          .emulator-frame {
+            width: 100%;
+            height: calc(100vh - 40px);
+            border: none;
+          }
+        </style>
+      </head>
+      <body>
+        <iframe 
+          class="emulator-frame"
+          src="${url}"
+          title="Apple2TS Emulator"
+          allow="autoplay; clipboard-read; clipboard-write"
+          sandbox="allow-scripts allow-same-origin allow-forms allow-downloads">
+          <p>Your browser does not support iframes. Please visit <a href="https://apple2ts.com">apple2ts.com</a> directly.</p>
+        </iframe>
+        ${script}
       </body>
       </html>`
   }
