@@ -149,6 +149,8 @@ npm run package
 code --install-extension *.vsix --force
 ```
 
+Then do `Ctrl/Cmd+Shift+P -> Developer:Reload Window` to reload VS Code.
+
 ## Update CHANGELOG
 
 Install the [Github Changelog Generator](https://github.com/github-changelog-generator/github-changelog-generator) by running:
