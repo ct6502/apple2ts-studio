@@ -1,17 +1,17 @@
-import * as vscode from 'vscode'
-import { EmulatorPanel } from './emulatorPanel'
-import { AssemblerService } from './assembler'
-import { LanguageFeatures } from './languageFeatures'
+import * as vscode from "vscode"
+import { EmulatorPanel } from "./emulatorPanel"
+import { AssemblerService } from "./assembler"
+import { LanguageFeatures } from "./languageFeatures"
 
 let emulatorPanel: EmulatorPanel
 let assemblerService: AssemblerService
 let languageFeatures: LanguageFeatures
 
 export function activate(context: vscode.ExtensionContext) {
-  console.log('Apple2TS Studio extension activated')
+  console.log("Apple2TS Studio extension activated")
 
   // Initialize services
-  const outputChannel = vscode.window.createOutputChannel('Apple2TS Assembler')
+  const outputChannel = vscode.window.createOutputChannel("Apple2TS Assembler")
   emulatorPanel = new EmulatorPanel(context.extensionUri, outputChannel)
   assemblerService = new AssemblerService(outputChannel)
   languageFeatures = new LanguageFeatures()
@@ -20,19 +20,19 @@ export function activate(context: vscode.ExtensionContext) {
   languageFeatures.register(context)
 
   // Register commands
-  const launchEmulatorCommand = vscode.commands.registerCommand('apple2ts.launchEmulator', () => {
+  const launchEmulatorCommand = vscode.commands.registerCommand("apple2ts.launchEmulator", () => {
     emulatorPanel.createOrShow(context, false)
   })
 
-  const buildAndRunCommand = vscode.commands.registerCommand('apple2ts.buildAndRun', async () => {
+  const buildAndRunCommand = vscode.commands.registerCommand("apple2ts.buildAndRun", async () => {
     const activeEditor = vscode.window.activeTextEditor
     if (!activeEditor) {
-      vscode.window.showWarningMessage('No active editor found. Please open a 6502 assembly file (.s, .asm, or .a65)')
+      vscode.window.showWarningMessage("No active editor found. Please open a 6502 assembly file (.s, .asm, or .a65)")
       return
     }
 
-    if (activeEditor.document.languageId !== 'apple2ts6502') {
-      vscode.window.showWarningMessage('Current file is not a 6502 assembly file. Make sure the file has extension .s, .asm, or .a65')
+    if (activeEditor.document.languageId !== "apple2ts6502") {
+      vscode.window.showWarningMessage("Current file is not a 6502 assembly file. Make sure the file has extension .s, .asm, or .a65")
       return
     }
 
@@ -50,19 +50,19 @@ export function activate(context: vscode.ExtensionContext) {
       vscode.window.showInformationMessage(`Program assembled successfully! ${binary.length} bytes loaded into emulator.`)
     } catch (error) {
       vscode.window.showErrorMessage(`Assembly failed: ${error}`)
-      console.error('Assembly error:', error)
+      console.error("Assembly error:", error)
     }
   })
 
-  const assembleFileCommand = vscode.commands.registerCommand('apple2ts.assembleFile', async () => {
+  const assembleFileCommand = vscode.commands.registerCommand("apple2ts.assembleFile", async () => {
     const activeEditor = vscode.window.activeTextEditor
     if (!activeEditor) {
-      vscode.window.showWarningMessage('No active editor found')
+      vscode.window.showWarningMessage("No active editor found")
       return
     }
 
-    if (activeEditor.document.languageId !== 'apple2ts6502') {
-      vscode.window.showWarningMessage('Current file is not a 6502 assembly file')
+    if (activeEditor.document.languageId !== "apple2ts6502") {
+      vscode.window.showWarningMessage("Current file is not a 6502 assembly file")
       return
     }
 
@@ -85,8 +85,8 @@ export function activate(context: vscode.ExtensionContext) {
   // Register status bar item
   const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100)
   statusBarItem.text = "$(play) Apple2TS"
-  statusBarItem.command = 'apple2ts.launchEmulator'
-  statusBarItem.tooltip = 'Launch Apple2TS Emulator'
+  statusBarItem.command = "apple2ts.launchEmulator"
+  statusBarItem.tooltip = "Launch Apple2TS Emulator"
   statusBarItem.show()
   context.subscriptions.push(statusBarItem)
 }

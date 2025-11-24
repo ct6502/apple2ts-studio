@@ -1,9 +1,9 @@
-import * as vscode from 'vscode'
-import * as zlib from 'zlib'
+import * as vscode from "vscode"
+import * as zlib from "zlib"
 
 export class EmulatorPanel {
   public static currentPanel: EmulatorPanel | undefined
-  public static readonly viewType = 'apple2tsEmulator'
+  public static readonly viewType = "apple2tsEmulator"
 
   private panel: vscode.WebviewPanel | undefined
   private disposables: vscode.Disposable[] = []
@@ -29,7 +29,7 @@ export class EmulatorPanel {
     } else {
       this.panel = vscode.window.createWebviewPanel(
         EmulatorPanel.viewType,
-        'Apple IIe Emulator',
+        "Apple IIe Emulator",
         column,
         {
           enableScripts: true,
@@ -42,24 +42,24 @@ export class EmulatorPanel {
       this.panel.webview.onDidReceiveMessage(
         (message: any) => {
           switch (message.command) {
-            case 'alert':
+            case "alert":
               vscode.window.showInformationMessage(message.text)
               return
-            case 'error':
+            case "error":
               vscode.window.showErrorMessage(message.text)
               return
-            case 'emulatorReady':
-              vscode.window.showInformationMessage('Apple2TS Emulator ready')
+            case "emulatorReady":
+              vscode.window.showInformationMessage("Apple2TS Emulator ready")
               return
-            case 'programLoaded':
+            case "programLoaded":
               if (message.success) {
-                vscode.window.showInformationMessage('Program loaded successfully')
+                vscode.window.showInformationMessage("Program loaded successfully")
               } else {
-                vscode.window.showErrorMessage('Failed to load program: ' + message.error)
+                vscode.window.showErrorMessage("Failed to load program: " + message.error)
               }
               return
-            case 'log':
-              console.log('Apple2TS:', message.message)
+            case "log":
+              console.log("Apple2TS:", message.message)
               return
           }
         },
@@ -108,20 +108,20 @@ export class EmulatorPanel {
   private getHtmlForWebview(webview: vscode.Webview, context: vscode.ExtensionContext, loadCode: boolean): string {
     // Start with basic URL without binary data
     const baseURL = "apple2ts.com" // "localhost:6502"
-    const protocol = baseURL.includes('localhost') ? 'http' : 'https'
-    const config = vscode.workspace.getConfiguration('apple2ts')
-    const appMode = config.get<string>('emulator.appmode', 'game')
-    const theme = config.get<string>('emulator.theme', 'dark')
+    const protocol = baseURL.includes("localhost") ? "http" : "https"
+    const config = vscode.workspace.getConfiguration("apple2ts")
+    const appMode = config.get<string>("emulator.appmode", "game")
+    const theme = config.get<string>("emulator.theme", "dark")
     const url = `${protocol}://${baseURL}?appmode=${appMode}&theme=${theme}`
     const origin = `${protocol}://${baseURL}`
     this.outputChannel.appendLine(`URL: ${url}`)
     this.outputChannel.appendLine(`Origin: ${origin}`)
 
     // Prepare binary data for postMessage
-    let script = ''
+    let script = ""
     if (loadCode) {
       const dataToSend = this.binary
-      const base64Data = Buffer.from(dataToSend).toString('base64')
+      const base64Data = Buffer.from(dataToSend).toString("base64")
       script = `
         <script>
           const iframe = document.querySelector('.emulator-frame');
