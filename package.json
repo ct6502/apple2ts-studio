@@ -89,39 +89,61 @@
       ]
     },
     "configuration": {
-      "title": "Apple2TS Studio",
+      "title": "Apple2TS",
       "properties": {
         "apple2ts.emulator.theme": {
+          "order": 1,
           "type": "string",
           "enum": [
             "Classic",
             "Dark"
           ],
-          "default": [
-            "Dark"
-          ],
+          "default": "Dark",
           "description": "Apple2TS Emulator Theme"
         },
         "apple2ts.emulator.appmode": {
+          "order": 2,
           "type": "string",
           "enum": [
             "Game",
             "Full"
           ],
-          "default": [
-            "Game"
-          ],
+          "default": "Game",
           "description": "Apple2TS Emulator Application Mode"
         },
-        "apple2ts.assembler.path": {
+        "apple2ts.assembler6502": {
+          "order": 10,
+          "type": "string",
+          "enum": [
+            "64tass",
+            "cl65"
+          ],
+          "default": "64tass",
+          "description": "Which 6502 assembler to use"
+        },
+        "apple2ts.assembler.tassPath": {
+          "order": 11,
           "type": "string",
           "default": "64tass",
-          "description": "Path to the 6502 assembler (64tass)"
+          "markdownDescription": "Path to [64tass](https://tass64.sourceforge.net/) executable"
         },
-        "apple2ts.assembler.args": {
+        "apple2ts.assembler.tassArgs": {
+          "order": 12,
           "type": "string",
-          "default": "-a --apple-ii --m65c02",
-          "description": "Additional arguments for 64tass assembler"
+          "default": "-a --nostart --m65c02",
+          "description": "Default arguments for 64tass assembler"
+        },
+        "apple2ts.assembler.cl65Path": {
+          "order": 21,
+          "type": "string",
+          "default": "cl65",
+          "markdownDescription": "Path to [cl65](https://cc65.github.io/doc/cl65.html) executable"
+        },
+        "apple2ts.assembler.cl65Args": {
+          "order": 22,
+          "type": "string",
+          "default": "-t none",
+          "description": "Default arguments for cl65 compiler/linker"
         }
       }
     }

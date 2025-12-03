@@ -53,7 +53,7 @@
     "directives": {
       "patterns": [
         {
-          "name": "keyword.directive.ca65.assembly",
+          "name": "keyword.directive.cl65.assembly",
           "match": "\\.(setcpu|zeropage|segment|res|byte|word|addr|dbyt|text|include|proc|endproc|macro|endmacro|if|ifdef|ifndef|endif|org|scope|endscope)\\b"
         },
         {

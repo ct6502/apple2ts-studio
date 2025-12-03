@@ -107,7 +107,7 @@ Configure the extension in VS Code settings:
 ```json
 {
     "apple2ts.assembler.path": "64tass",
-    "apple2ts.assembler.args": "-a --apple-ii --m65c02"
+    "apple2ts.assembler.args": "-a --nostart --m65c02"
 }
 ```
 

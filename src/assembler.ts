@@ -15,30 +15,30 @@ export class AssemblerService {
 
   public async assembleFile(sourceUri: vscode.Uri): Promise<[number, Uint8Array]> {
     const sourcePath = sourceUri.fsPath
-    const workspaceFolder = vscode.workspace.getWorkspaceFolder(sourceUri)
     
-    // Use workspace folder if available, otherwise use the file's directory
-    const workspacePath = workspaceFolder ? workspaceFolder.uri.fsPath : path.dirname(sourcePath)
+    // Use the file's directory for output files
+    const workspacePath = path.dirname(sourcePath)
     const sourceFileName = path.basename(sourcePath, path.extname(sourcePath))
-    const objectPath = path.join(workspacePath, `${sourceFileName}.o`)
     const binaryPath = path.join(workspacePath, `${sourceFileName}.bin`)
 
     this.outputChannel.clear()
     this.outputChannel.show()
 
     try {
-      // Get assembler path and arguments from configuration
+      // Get assembler preference from configuration
       const config = vscode.workspace.getConfiguration("apple2ts")
-      const assemblerPath = config.get<string>("assembler.path", "64tass")
-      const assemblerArgs = config.get<string>("assembler.args", "-a --apple-ii --m65c02")
-
+      const selectedAssembler = config.get<string>("assembler6502", "64tass")
+      
       this.outputChannel.appendLine(`Assembling: ${sourcePath}`)
+      this.outputChannel.appendLine(`Selected assembler: ${selectedAssembler}`)
 
-      // Check if we can use 64tass or fall back to simple assembler
-      if (await this.checkToolExists(assemblerPath)) {
-        return await this.assembleWith64tass(sourcePath, binaryPath, assemblerPath, assemblerArgs)
+      // Try to use the selected assembler, fall back to simple assembler if not available
+      if (selectedAssembler === "64tass") {
+        return await this.assembleWith64tass(sourcePath, binaryPath)
+      } else if (selectedAssembler === "cl65") {
+        return await this.assembleWithCl65(sourcePath, workspacePath, sourceFileName)
       } else {
-        this.outputChannel.appendLine("64tass not found, using built-in simple assembler")
+        this.outputChannel.appendLine(`Unknown assembler "${selectedAssembler}", using simple assembler`)
         return await this.assembleWithSimpleAssembler(sourcePath)
       }
     } catch (error) {
@@ -47,7 +47,17 @@ export class AssemblerService {
     }
   }
 
-  private async assembleWith64tass(sourcePath: string, binaryPath: string, assemblerPath: string, assemblerArgs: string): Promise<[number, Uint8Array]> {
+  private async assembleWith64tass(sourcePath: string, binaryPath: string): Promise<[number, Uint8Array]> {
+    const config = vscode.workspace.getConfiguration("apple2ts")
+    const assemblerPath = config.get<string>("assembler.tassPath", "64tass")
+    const assemblerArgs = config.get<string>("assembler.tassArgs", "-a --nostart --m65c02")
+    if (!this.checkToolExists(assemblerPath)) {
+      throw new Error(`64tass assembler not found at path: ${assemblerPath}`)
+    }
+    
+    // Get load address from source file
+    const address = await this.parseLoadAddress(sourcePath)
+    
     // Assemble with 64tass
     const assembleCommand = `"${assemblerPath}" ${assemblerArgs} -o "${binaryPath}" "${sourcePath}"`
     this.outputChannel.appendLine(`Running: ${assembleCommand}`)
@@ -62,14 +72,50 @@ export class AssemblerService {
 
     // Read the binary file
     let binary = await fs.promises.readFile(binaryPath)
-    // Since we used --apple-ii, the first four bytes have the load address and
-    // the data length (always equal to 1). Retrieve the address and strip the header.
-    const address = binary[0] + (binary[1] << 8)
-    binary = binary.slice(4)
+    // Skip the 4-byte header if present (from --apple-ii format)
+    if (binary.length >= 4 && assemblerArgs.includes("--apple-ii")) {
+      binary = binary.slice(4)
+    }
     
-    this.outputChannel.appendLine(`Successfully generated ${binary.length} bytes`)
+    this.outputChannel.appendLine(`Successfully generated ${binary.length} bytes at address $${address.toString(16).toUpperCase()}`)
     
     return [address, new Uint8Array(binary)]
+  }
+
+  private async assembleWithCl65(sourcePath: string, workspacePath: string, sourceFileName: string): Promise<[number, Uint8Array]> {
+    const config = vscode.workspace.getConfiguration("apple2ts")
+    const assemblerPath = config.get<string>("assembler.cl65Path", "cl65")
+    const assemblerArgs = config.get<string>("assembler.cl65Args", "-t none")
+    if (!this.checkToolExists(assemblerPath)) {
+      throw new Error(`cl65 assembler not found at path: ${assemblerPath}`)
+    }
+
+    // Get load address from source file
+    const address = await this.parseLoadAddress(sourcePath)
+    
+    const binaryPath = path.join(workspacePath, `${sourceFileName}.bin`)
+    
+    try {
+      const assembleCommand = `"${assemblerPath}" ${assemblerArgs} -o "${binaryPath}" "${sourcePath}"`
+      this.outputChannel.appendLine(`Running: ${assembleCommand}`)
+      
+      const assembleResult = await execAsync(assembleCommand)
+      if (assembleResult.stderr) {
+        this.outputChannel.appendLine(`cl65 stderr: ${assembleResult.stderr}`)
+      }
+      if (assembleResult.stdout) {
+        this.outputChannel.appendLine(`cl65 stdout: ${assembleResult.stdout}`)
+      }
+
+      // Read the binary file
+      const binary = await fs.promises.readFile(binaryPath)
+      
+      this.outputChannel.appendLine(`Successfully generated ${binary.length} bytes at address $${address.toString(16).toUpperCase()}`)
+      
+      return [address, new Uint8Array(binary)]
+    } catch (error) {
+      throw error
+    }
   }
 
   private async assembleWithSimpleAssembler(sourcePath: string): Promise<[number, Uint8Array]> {
@@ -132,10 +178,51 @@ export class AssemblerService {
     return this.parseValue(addrStr)
   }
 
+  private async parseLoadAddress(sourcePath: string): Promise<number> {
+    try {
+      const source = await fs.promises.readFile(sourcePath, "utf8")
+      const lines = source.split("\n")
+      
+      for (const line of lines) {
+        const trimmed = line.trim()
+        // Look for 64tass syntax: * = $address or *= $address
+        const match64tass = trimmed.match(/^\s*\*\s*=\s*\$([0-9a-fA-F]+)/i)
+        if (match64tass) {
+          const addr = parseInt(match64tass[1], 16)
+          this.outputChannel.appendLine(`Found load address: $${addr.toString(16).toUpperCase()}`)
+          return addr
+        }
+        
+        // Look for ca65 syntax: .org $address
+        const matchCa65 = trimmed.match(/^\s*\.org\s+\$([0-9a-fA-F]+)/i)
+        if (matchCa65) {
+          const addr = parseInt(matchCa65[1], 16)
+          this.outputChannel.appendLine(`Found load address: $${addr.toString(16).toUpperCase()}`)
+          return addr
+        }
+      }
+      
+      // Default to $0800 if no address found
+      this.outputChannel.appendLine("No load address found, defaulting to $0800")
+      return 0x0800
+    } catch (error) {
+      this.outputChannel.appendLine(`Error parsing load address: ${error}`)
+      return 0x0800
+    }
+  }
+
   private async checkToolExists(toolPath: string): Promise<boolean> {
     try {
-      // 64tass uses --help instead of --version
-      await execAsync(`"${toolPath}" --help`)
+      if (toolPath.includes("64tass")) {
+        // 64tass uses --help instead of --version
+        await execAsync(`"${toolPath}" --help`)
+      } else if (toolPath.includes("cl65")) {
+        // cl65 uses --version
+        await execAsync(`"${toolPath}" --version`)
+      } else {
+        // Generic check with --help
+        await execAsync(`"${toolPath}" --help`)
+      }
       return true
     } catch {
       return false
