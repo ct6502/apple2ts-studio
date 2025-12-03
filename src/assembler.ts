@@ -37,6 +37,8 @@ export class AssemblerService {
         return await this.assembleWith64tass(sourcePath, binaryPath)
       } else if (selectedAssembler === "cl65") {
         return await this.assembleWithCl65(sourcePath, workspacePath, sourceFileName)
+      } else if (selectedAssembler === "merlin32") {
+        return await this.assembleWithMerlin32(sourcePath, workspacePath, sourceFileName)
       } else {
         this.outputChannel.appendLine(`Unknown assembler "${selectedAssembler}", using simple assembler`)
         return await this.assembleWithSimpleAssembler(sourcePath)
@@ -58,8 +60,14 @@ export class AssemblerService {
     // Get load address from source file
     const address = await this.parseLoadAddress(sourcePath)
     
+    // Get binary name from source file, fallback to original name
+    const workspacePath = path.dirname(sourcePath)
+    const sourceFileName = path.basename(sourcePath, path.extname(sourcePath))
+    const binaryName = await this.parseBinaryName(sourcePath, sourceFileName)
+    const actualBinaryPath = path.join(workspacePath, `${binaryName}.bin`)
+    
     // Assemble with 64tass
-    const assembleCommand = `"${assemblerPath}" ${assemblerArgs} -o "${binaryPath}" "${sourcePath}"`
+    const assembleCommand = `"${assemblerPath}" ${assemblerArgs} -o "${actualBinaryPath}" "${sourcePath}"`
     this.outputChannel.appendLine(`Running: ${assembleCommand}`)
     
     const assembleResult = await execAsync(assembleCommand)
@@ -71,7 +79,7 @@ export class AssemblerService {
     }
 
     // Read the binary file
-    let binary = await fs.promises.readFile(binaryPath)
+    let binary = await fs.promises.readFile(actualBinaryPath)
     // Skip the 4-byte header if present (from --apple-ii format)
     if (binary.length >= 4 && assemblerArgs.includes("--apple-ii")) {
       binary = binary.slice(4)
@@ -93,7 +101,9 @@ export class AssemblerService {
     // Get load address from source file
     const address = await this.parseLoadAddress(sourcePath)
     
-    const binaryPath = path.join(workspacePath, `${sourceFileName}.bin`)
+    // Get binary name from source file, fallback to original name
+    const binaryName = await this.parseBinaryName(sourcePath, sourceFileName)
+    const binaryPath = path.join(workspacePath, `${binaryName}.bin`)
     
     try {
       const assembleCommand = `"${assemblerPath}" ${assemblerArgs} -o "${binaryPath}" "${sourcePath}"`
@@ -105,6 +115,48 @@ export class AssemblerService {
       }
       if (assembleResult.stdout) {
         this.outputChannel.appendLine(`cl65 stdout: ${assembleResult.stdout}`)
+      }
+
+      // Read the binary file
+      const binary = await fs.promises.readFile(binaryPath)
+      
+      this.outputChannel.appendLine(`Successfully generated ${binary.length} bytes at address $${address.toString(16).toUpperCase()}`)
+      
+      return [address, new Uint8Array(binary)]
+    } catch (error) {
+      throw error
+    }
+  }
+
+  private async assembleWithMerlin32(sourcePath: string, workspacePath: string, sourceFileName: string): Promise<[number, Uint8Array]> {
+    const config = vscode.workspace.getConfiguration("apple2ts")
+    const assemblerPath = config.get<string>("assembler.merlinPath", "merlin32")
+    const assemblerArgs = config.get<string>("assembler.merlinArgs", "")
+    if (!this.checkToolExists(assemblerPath)) {
+      throw new Error(`merlin32 assembler not found at path: ${assemblerPath}`)
+    }
+
+    // Get load address from source file
+    const address = await this.parseLoadAddress(sourcePath)
+    
+    // Get binary name from source file, fallback to original name
+    const binaryName = await this.parseBinaryName(sourcePath, sourceFileName)
+    const binaryPath = path.join(workspacePath, `${binaryName}`)
+    
+    // Get extension path and add library directory
+    const extensionPath = path.dirname(__dirname) // Go up from 'out' to extension root
+    const libraryPath = path.join(extensionPath, "src", "merlin32_library")
+    
+    try {
+      const assembleCommand = `"${assemblerPath}" -V "${libraryPath}" ${assemblerArgs} "${sourcePath}"`
+      this.outputChannel.appendLine(`Running: ${assembleCommand}`)
+      
+      const assembleResult = await execAsync(assembleCommand)
+      if (assembleResult.stderr) {
+        this.outputChannel.appendLine(`merlin32 stderr: ${assembleResult.stderr}`)
+      }
+      if (assembleResult.stdout) {
+        this.outputChannel.appendLine(`merlin32 stdout: ${assembleResult.stdout}`)
       }
 
       // Read the binary file
@@ -178,6 +230,31 @@ export class AssemblerService {
     return this.parseValue(addrStr)
   }
 
+  private async parseBinaryName(sourcePath: string, defaultName: string): Promise<string> {
+    try {
+      const source = await fs.promises.readFile(sourcePath, "utf8")
+      const lines = source.split("\n")
+      
+      for (const line of lines) {
+        const trimmed = line.trim()
+        // Look for DSK directive: DSK filename ; comment
+        const matchDSK = trimmed.match(/^\s*DSK\s+([^\s;]+)/i)
+        if (matchDSK) {
+          const binaryName = matchDSK[1]
+          this.outputChannel.appendLine(`Found binary name: ${binaryName}`)
+          return binaryName
+        }
+      }
+      
+      // Default to source filename if no DSK directive found
+      this.outputChannel.appendLine(`No DSK directive found, using default: ${defaultName}`)
+      return defaultName
+    } catch (error) {
+      this.outputChannel.appendLine(`Error parsing binary name: ${error}`)
+      return defaultName
+    }
+  }
+
   private async parseLoadAddress(sourcePath: string): Promise<number> {
     try {
       const source = await fs.promises.readFile(sourcePath, "utf8")
@@ -193,10 +270,10 @@ export class AssemblerService {
           return addr
         }
         
-        // Look for ca65 syntax: .org $address
-        const matchCa65 = trimmed.match(/^\s*\.org\s+\$([0-9a-fA-F]+)/i)
-        if (matchCa65) {
-          const addr = parseInt(matchCa65[1], 16)
+        // Look for ca65/merlin32 syntax: .org $address or org $address
+        const matchOrg = trimmed.match(/^\s*\.?org\s+\$([0-9a-fA-F]+)/i)
+        if (matchOrg) {
+          const addr = parseInt(matchOrg[1], 16)
           this.outputChannel.appendLine(`Found load address: $${addr.toString(16).toUpperCase()}`)
           return addr
         }
