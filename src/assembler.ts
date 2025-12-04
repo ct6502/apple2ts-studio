@@ -149,6 +149,14 @@ export class AssemblerService {
     const libraryPath = (assemblerMacros !== "") ? assemblerMacros :
       path.join(extensionPath, "src", "merlin32_library")
     
+    // Check if library path exists
+    try {
+      await fs.promises.access(libraryPath)
+      this.outputChannel.appendLine(`Using Merlin32 library path: ${libraryPath}`)
+    } catch {
+      this.outputChannel.appendLine(`Warning: Merlin32 library path not found: ${libraryPath}`)
+    }
+    
     try {
       const assembleCommand = `"${assemblerPath}" -V "${libraryPath}" ${assemblerArgs} "${sourcePath}"`
       this.outputChannel.appendLine(`Running: ${assembleCommand}`)

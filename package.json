@@ -1,6 +1,6 @@
 {
   "name": "apple2ts-studio",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "publisher": "CT6502",
   "engines": {
     "vscode": "^1.100.0"
@@ -32,6 +32,16 @@
   ],
   "activationEvents": [],
   "main": "./out/extension.js",
+  "files": [
+    "out/**/*",
+    "syntaxes/**/*",
+    "language-configuration.json",
+    "src/merlin32_library/**/*",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md",
+    "assets/**/*"
+  ],
   "contributes": {
     "languages": [
       {
