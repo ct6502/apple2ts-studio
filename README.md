@@ -17,8 +17,7 @@ A Visual Studio Code extension for 6502 assembly programming with an integrated 
   - Apple II specific features and memory mapping
 
 - **Build System**
-  - Support for 64tass assembler toolchain
-  - Built-in simple assembler
+  - Support for 64tass, cl65, and Merlin32 assemblers
   - F5 to build and run in emulator
   - Assembly output and error reporting
 
@@ -33,7 +32,9 @@ A Visual Studio Code extension for 6502 assembly programming with an integrated 
 
 ### Prerequisites
 
-For advanced assembly features, install the 64tass assembler:
+For advanced assembly features, install a macro assembler such as [64tass](https://tass64.sourceforge.net/), [cl65](https://cc65.github.io/doc/cl65.html), or [Merlin32](https://brutaldeluxe.fr/products/crossdevtools/merlin/).
+
+For example, to install the 64tass assembler:
 
 ```bash
 # macOS with MacPorts
@@ -86,7 +87,7 @@ start:
 
 ## 6502 Instruction Set
 
-The extension provides complete support for the 6502 instruction set with:
+The extension provides complete support for the 65c02 instruction set with:
 
 - All official opcodes (ADC, AND, ASL, BCC, etc.)
 - Multiple addressing modes
@@ -102,14 +103,7 @@ The extension provides complete support for the 6502 instruction set with:
 
 ## Configuration
 
-Configure the extension in VS Code settings:
-
-```json
-{
-    "apple2ts.assembler.path": "64tass",
-    "apple2ts.assembler.args": "-a --nostart --m65c02"
-}
-```
+Configure the extension in VS Code settings.
 
 ## Development
 
@@ -125,7 +119,7 @@ apple2ts-studio/
 ├── syntaxes/
 │   └── asm6502.tmGrammar.json # Syntax highlighting
 └── examples/
-    └── hello.s               # Sample assembly program
+    └── hello_*.s             # Sample assembly programs
     └── graphics.s            # Sample assembly program
     └── 65c02_complete_demo.s # All 65c02 instructions and address modes
 ```
@@ -189,21 +183,13 @@ github_changelog_generator --token xxxxx -u ct6502 -p apple2ts
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the Creative Commons Attribution-ShareAlike 4.0 International
+license - see the LICENSE file for details.
 
-## Roadmap
+## References
 
-- [ ] Full Apple2TS emulator integration
-- [ ] Debugging with breakpoints
-- [ ] Disk image support
-- [ ] Graphics mode support
-- [ ] Sound emulation
-- [ ] Save/restore emulator state
-- [ ] Assembly project templates
-- [ ] Advanced macro support
-
-## Acknowledgments
-
-- Based on the Apple2TS TypeScript Apple IIe emulator
+- Based on the [Apple2TS](https://github.com/ct6502/apple2ts) TypeScript Apple IIe emulator
+- [Assembly Lines: The Complete Book](https://ct6502.org/shop/) by Roger Wagner
 - 6502 processor documentation and references
-- VS Code extension development guides
+- [VS Code Language Extension](https://code.visualstudio.com/api/language-extensions/overview)
+- [VS Code Extension Publishing](https://code.visualstudio.com/api/working-with-extensions/publishing-extension)

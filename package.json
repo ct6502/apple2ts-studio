@@ -1,6 +1,6 @@
 {
   "name": "apple2ts-studio",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "CT6502",
   "engines": {
     "vscode": "^1.100.0"
