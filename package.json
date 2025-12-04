@@ -132,7 +132,7 @@
           "order": 12,
           "type": "string",
           "default": "-a --nostart --m65c02",
-          "description": "Default arguments for 64tass assembler"
+          "description": "Arguments for 64tass assembler"
         },
         "apple2ts.assembler.cl65Path": {
           "order": 21,
@@ -144,7 +144,7 @@
           "order": 22,
           "type": "string",
           "default": "-t none",
-          "description": "Default arguments for cl65 compiler/linker"
+          "description": "Arguments for cl65 compiler/linker"
         },
         "apple2ts.assembler.merlinPath": {
           "order": 31,
@@ -156,7 +156,13 @@
           "order": 32,
           "type": "string",
           "default": "",
-          "description": "Default arguments for Merlin32 compiler/linker"
+          "description": "Arguments for Merlin32 compiler/linker"
+        },
+        "apple2ts.assembler.merlinMacros": {
+          "order": 33,
+          "type": "string",
+          "default": "",
+          "description": "Location of Merlin32 macro library (leave empty for default location within the extension)"
         }
       }
     }

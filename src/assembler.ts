@@ -132,6 +132,7 @@ export class AssemblerService {
     const config = vscode.workspace.getConfiguration("apple2ts")
     const assemblerPath = config.get<string>("assembler.merlinPath", "merlin32")
     const assemblerArgs = config.get<string>("assembler.merlinArgs", "")
+    const assemblerMacros = config.get<string>("assembler.merlinMacros", "")
     if (!this.checkToolExists(assemblerPath)) {
       throw new Error(`merlin32 assembler not found at path: ${assemblerPath}`)
     }
@@ -145,7 +146,8 @@ export class AssemblerService {
     
     // Get extension path and add library directory
     const extensionPath = path.dirname(__dirname) // Go up from 'out' to extension root
-    const libraryPath = path.join(extensionPath, "src", "merlin32_library")
+    const libraryPath = (assemblerMacros !== "") ? assemblerMacros :
+      path.join(extensionPath, "src", "merlin32_library")
     
     try {
       const assembleCommand = `"${assemblerPath}" -V "${libraryPath}" ${assemblerArgs} "${sourcePath}"`
