@@ -1,3 +1,0 @@
-Segment Name;Segment Line;File Name;File Line;Address;Name;Type;Data Type;Size;MX;Reloc
-Segment1;8;hello_merlin32.s;8;00/0800;start;Code;;2;11;
-Segment1;42;hello_merlin32.s;42;00/0837;loop;Code;;1;11;

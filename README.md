@@ -2,10 +2,12 @@
 
 A Visual Studio Code extension for 6502 assembly programming with an integrated Apple IIe emulator.
 
+![Apple2TS Studio Screenshot](assets/apple2ts-studio.jpg)
+
 ## Features
 
-- **6502 Assembly Language Support**
-  - Syntax highlighting for 6502 assembly
+- **6502/65c02 Assembly Language Support**
+  - Syntax highlighting for 6502/65c02 assembly
   - IntelliSense with instruction completion
   - Hover documentation for instructions
   - Apple II specific memory address completion
@@ -190,6 +192,8 @@ license - see the LICENSE file for details.
 
 - Based on the [Apple2TS](https://github.com/ct6502/apple2ts) TypeScript Apple IIe emulator
 - [Assembly Lines: The Complete Book](https://ct6502.org/shop/) by Roger Wagner
-- 6502 processor documentation and references
+- [64tass](https://tass64.sourceforge.net/)
+- [cl65](https://cc65.github.io/doc/cl65.html) and [ca65](https://cc65.github.io/doc/ca65.html)
+- [Merlin32](https://brutaldeluxe.fr/products/crossdevtools/merlin/)
 - [VS Code Language Extension](https://code.visualstudio.com/api/language-extensions/overview)
 - [VS Code Extension Publishing](https://code.visualstudio.com/api/working-with-extensions/publishing-extension)

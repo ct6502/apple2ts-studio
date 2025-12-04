@@ -24,4 +24,4 @@ coverage/
 
 # Compiled 6502 files
 *.bin
-_FileInformation.txt
+examples/*.txt

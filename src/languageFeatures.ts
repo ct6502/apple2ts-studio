@@ -15,70 +15,70 @@ export class LanguageFeatures {
   emptyMode = ["--"]
   allModes = ["#nn", "nn", "nnnn", "nn,X", "nnnn,X", "nnnn,Y", "(nn,X)", "(nn),Y", "(nn)"]
   private instructions: Instruction[] = [
-    makeInstr("ADC", "Add with Carry", this.allModes, "2-6"),
-    makeInstr("AND", "Logical AND", this.allModes, "2-6"),
-    makeInstr("ASL", "Arithmetic Shift Left", ["A", "nn", "nnnn", "nn,X", "nnnn,X"], "2-7"),
-    makeInstr("BCC", "Branch if Carry Clear", ["nn"], "2*"),
-    makeInstr("BCS", "Branch if Carry Set", ["nn"], "2*"),
-    makeInstr("BEQ", "Branch if Equal", ["nn"], "2*"),
-    makeInstr("BIT", "Bit Test", ["nn", "nnnn"], "2-4+"),
-    makeInstr("BMI", "Branch if Minus", ["nn"], "2*"),
-    makeInstr("BNE", "Branch if Not Equal", ["nn"], "2*"),
-    makeInstr("BPL", "Branch if Positive", ["nn"], "2*"),
-    makeInstr("BRA", "Branch Always", ["nn"], "3+"),
-    makeInstr("BRK", "Break", this.emptyMode, "7"),
-    makeInstr("BVC", "Branch if Overflow Clear", ["nn"], "2*"),
-    makeInstr("BVS", "Branch if Overflow Set", ["nn"], "2*"),
-    makeInstr("CLC", "Clear Carry Flag", this.emptyMode, "2"),
-    makeInstr("CLD", "Clear Decimal Flag", this.emptyMode, "2"),
-    makeInstr("CLI", "Clear Interrupt Flag", this.emptyMode, "2"),
-    makeInstr("CLV", "Clear Overflow Flag", this.emptyMode, "2"),
-    makeInstr("CMP", "Compare Accumulator", this.allModes, "2-6"),
-    makeInstr("CPX", "Compare X Register", ["#nn", "nn", "nnnn"], "2-4"),
-    makeInstr("CPY", "Compare Y Register", ["#nn", "nn", "nnnn"], "2-4"),
-    makeInstr("DEC", "Decrement Accum/Memory", ["--", "nn", "nnnn", "nn,X", "nnnn,X"], "2-7"),
-    makeInstr("DEX", "Decrement X Register", this.emptyMode, "2"),
-    makeInstr("DEY", "Decrement Y Register", this.emptyMode, "2"),
-    makeInstr("EOR", "Exclusive OR", this.allModes, "2-6"),
-    makeInstr("INC", "Increment Accum/Memory", ["--", "nn", "nnnn", "nn,X", "nnnn,X"], "5-7"),
-    makeInstr("INX", "Increment X Register", this.emptyMode, "2"),
-    makeInstr("INY", "Increment Y Register", this.emptyMode, "2"),
-    makeInstr("JMP", "Jump", ["nnnn", "(nnnn)"], "3-6"),
-    makeInstr("JSR", "Jump to Subroutine", ["nnnn"], "6"),
-    makeInstr("LDA", "Load Accumulator", this.allModes, "2-6"),
-    makeInstr("LDX", "Load X Register", ["#nn", "nn", "nnnn", "nn,Y", "nnnn,Y"], "2-4+"),
-    makeInstr("LDY", "Load Y Register", ["#nn", "nn", "nnnn", "nn,X", "nnnn,X"], "2-4+"),
-    makeInstr("LSR", "Logical Shift Right", ["A", "nn", "nnnn", "nn,X", "nnnn,X"], "2-7"),
-    makeInstr("NOP", "No Operation", this.emptyMode, "2"),
-    makeInstr("ORA", "Logical OR", this.allModes, "2-6"),
-    makeInstr("PHA", "Push Accumulator", this.emptyMode, "3"),
-    makeInstr("PHP", "Push Processor Status", this.emptyMode, "3"),
-    makeInstr("PHX", "Push X Register", this.emptyMode, "3"),
-    makeInstr("PHY", "Push Y Register", this.emptyMode, "3"),
-    makeInstr("PLA", "Pull Accumulator", this.emptyMode, "4"),
-    makeInstr("PLP", "Pull Processor Status", this.emptyMode, "4"),
-    makeInstr("PLX", "Pull X Register", this.emptyMode, "4"),
-    makeInstr("PLY", "Pull Y Register", this.emptyMode, "4"),
-    makeInstr("ROL", "Rotate Left", ["A", "nn", "nnnn", "nn,X", "nnnn,X"], "2-7"),
-    makeInstr("ROR", "Rotate Right", ["A", "nn", "nnnn", "nn,X", "nnnn,X"], "2-7"),
-    makeInstr("RTI", "Return from Interrupt", this.emptyMode, "6"),
-    makeInstr("RTS", "Return from Subroutine", this.emptyMode, "6"),
-    makeInstr("SBC", "Subtract with Carry", this.allModes, "2-6"),
-    makeInstr("SEC", "Set Carry Flag", this.emptyMode, "2"),
-    makeInstr("SED", "Set Decimal Flag", this.emptyMode, "2"),
-    makeInstr("SEI", "Set Interrupt Flag", this.emptyMode, "2"),
-    makeInstr("STA", "Store Accumulator", ["nn", "nnnn", "nn,X", "nnnn,X", "nnnn,Y", "(nn,X)", "(nn),Y", "(nn)"], "3-6"),
-    makeInstr("STX", "Store X Register", ["nn", "nnnn", "nn,Y"], "3-4"),
-    makeInstr("STY", "Store Y Register", ["nn", "nnnn", "nn,X"], "3-4"),
-    makeInstr("STZ", "Store Zero in Memory", ["nn", "nn,X", "nnnn", "nnnn,X"], "3-5"),
-    makeInstr("TAX", "Transfer A to X", this.emptyMode, "2"),
-    makeInstr("TAY", "Transfer A to Y", this.emptyMode, "2"),
-    makeInstr("TRB", "Test and Reset Bits", ["nn", "nnnn"], "5-6"),
-    makeInstr("TSB", "Test and Set Bits", ["nn", "nnnn"], "5-6"),
-    makeInstr("TSX", "Transfer Stack Pointer to X", this.emptyMode, "2"),
-    makeInstr("TXA", "Transfer X to A", this.emptyMode, "2"),
-    makeInstr("TXS", "Transfer X to Stack Pointer", this.emptyMode, "2"),
-    makeInstr("TYA", "Transfer Y to A", this.emptyMode, "2")
+    makeInstr("adc", "Add with Carry", this.allModes, "2-6"),
+    makeInstr("and", "Logical AND", this.allModes, "2-6"),
+    makeInstr("asl", "Arithmetic Shift Left", ["A", "nn", "nnnn", "nn,X", "nnnn,X"], "2-7"),
+    makeInstr("bcc", "Branch if Carry Clear", ["nn"], "2*"),
+    makeInstr("bcs", "Branch if Carry Set", ["nn"], "2*"),
+    makeInstr("beq", "Branch if Equal", ["nn"], "2*"),
+    makeInstr("bit", "Bit Test", ["nn", "nnnn"], "2-4+"),
+    makeInstr("bmi", "Branch if Minus", ["nn"], "2*"),
+    makeInstr("bne", "Branch if Not Equal", ["nn"], "2*"),
+    makeInstr("bpl", "Branch if Positive", ["nn"], "2*"),
+    makeInstr("bra", "Branch Always", ["nn"], "3+"),
+    makeInstr("brk", "Break", this.emptyMode, "7"),
+    makeInstr("bvc", "Branch if Overflow Clear", ["nn"], "2*"),
+    makeInstr("bvs", "Branch if Overflow Set", ["nn"], "2*"),
+    makeInstr("clc", "Clear Carry Flag", this.emptyMode, "2"),
+    makeInstr("cld", "Clear Decimal Flag", this.emptyMode, "2"),
+    makeInstr("cli", "Clear Interrupt Flag", this.emptyMode, "2"),
+    makeInstr("clv", "Clear Overflow Flag", this.emptyMode, "2"),
+    makeInstr("cmp", "Compare Accumulator", this.allModes, "2-6"),
+    makeInstr("cpx", "Compare X Register", ["#nn", "nn", "nnnn"], "2-4"),
+    makeInstr("cpy", "Compare Y Register", ["#nn", "nn", "nnnn"], "2-4"),
+    makeInstr("dec", "Decrement Accum/Memory", ["--", "nn", "nnnn", "nn,X", "nnnn,X"], "2-7"),
+    makeInstr("dex", "Decrement X Register", this.emptyMode, "2"),
+    makeInstr("dey", "Decrement Y Register", this.emptyMode, "2"),
+    makeInstr("eor", "Exclusive OR", this.allModes, "2-6"),
+    makeInstr("inc", "Increment Accum/Memory", ["--", "nn", "nnnn", "nn,X", "nnnn,X"], "5-7"),
+    makeInstr("inx", "Increment X Register", this.emptyMode, "2"),
+    makeInstr("iny", "Increment Y Register", this.emptyMode, "2"),
+    makeInstr("jmp", "Jump", ["nnnn", "(nnnn)"], "3-6"),
+    makeInstr("jsr", "Jump to Subroutine", ["nnnn"], "6"),
+    makeInstr("lda", "Load Accumulator", this.allModes, "2-6"),
+    makeInstr("ldx", "Load X Register", ["#nn", "nn", "nnnn", "nn,Y", "nnnn,Y"], "2-4+"),
+    makeInstr("ldy", "Load Y Register", ["#nn", "nn", "nnnn", "nn,X", "nnnn,X"], "2-4+"),
+    makeInstr("lsr", "Logical Shift Right", ["A", "nn", "nnnn", "nn,X", "nnnn,X"], "2-7"),
+    makeInstr("nop", "No Operation", this.emptyMode, "2"),
+    makeInstr("ora", "Logical OR", this.allModes, "2-6"),
+    makeInstr("pha", "Push Accumulator", this.emptyMode, "3"),
+    makeInstr("php", "Push Processor Status", this.emptyMode, "3"),
+    makeInstr("phx", "Push X Register", this.emptyMode, "3"),
+    makeInstr("phy", "Push Y Register", this.emptyMode, "3"),
+    makeInstr("pla", "Pull Accumulator", this.emptyMode, "4"),
+    makeInstr("plp", "Pull Processor Status", this.emptyMode, "4"),
+    makeInstr("plx", "Pull X Register", this.emptyMode, "4"),
+    makeInstr("ply", "Pull Y Register", this.emptyMode, "4"),
+    makeInstr("rol", "Rotate Left", ["A", "nn", "nnnn", "nn,X", "nnnn,X"], "2-7"),
+    makeInstr("ror", "Rotate Right", ["A", "nn", "nnnn", "nn,X", "nnnn,X"], "2-7"),
+    makeInstr("rti", "Return from Interrupt", this.emptyMode, "6"),
+    makeInstr("rts", "Return from Subroutine", this.emptyMode, "6"),
+    makeInstr("sbc", "Subtract with Carry", this.allModes, "2-6"),
+    makeInstr("sec", "Set Carry Flag", this.emptyMode, "2"),
+    makeInstr("sed", "Set Decimal Flag", this.emptyMode, "2"),
+    makeInstr("sei", "Set Interrupt Flag", this.emptyMode, "2"),
+    makeInstr("sta", "Store Accumulator", ["nn", "nnnn", "nn,X", "nnnn,X", "nnnn,Y", "(nn,X)", "(nn),Y", "(nn)"], "3-6"),
+    makeInstr("stx", "Store X Register", ["nn", "nnnn", "nn,Y"], "3-4"),
+    makeInstr("sty", "Store Y Register", ["nn", "nnnn", "nn,X"], "3-4"),
+    makeInstr("stz", "Store Zero in Memory", ["nn", "nn,X", "nnnn", "nnnn,X"], "3-5"),
+    makeInstr("tax", "Transfer A to X", this.emptyMode, "2"),
+    makeInstr("tay", "Transfer A to Y", this.emptyMode, "2"),
+    makeInstr("trb", "Test and Reset Bits", ["nn", "nnnn"], "5-6"),
+    makeInstr("tsb", "Test and Set Bits", ["nn", "nnnn"], "5-6"),
+    makeInstr("tsx", "Transfer Stack Pointer to X", this.emptyMode, "2"),
+    makeInstr("txa", "Transfer X to A", this.emptyMode, "2"),
+    makeInstr("txs", "Transfer X to Stack Pointer", this.emptyMode, "2"),
+    makeInstr("tya", "Transfer Y to A", this.emptyMode, "2")
   ]
 
   private appleIIAddresses: { [key: string]: string } = {
@@ -185,13 +185,13 @@ export class LanguageFeatures {
       return undefined
     }
 
-    const word = document.getText(range).toUpperCase()
+    const word = document.getText(range).toLowerCase()
 
     // Check if it's an instruction
     const instruction = this.instructions.find(inst => inst.mnemonic === word)
     if (instruction) {
       const markdown = new vscode.MarkdownString()
-      markdown.appendMarkdown(`**${instruction.mnemonic}** - ${instruction.description}\n\n`)
+      markdown.appendMarkdown(`**${instruction.mnemonic.toUpperCase()}** - ${instruction.description}\n\n`)
       markdown.appendMarkdown(`Addressing modes: \`${instruction.addressing.join(", ")}\`\n\n`)
       markdown.appendMarkdown(`Cycles: ${instruction.cycles}`)
       return new vscode.Hover(markdown, range)
@@ -223,7 +223,7 @@ export class LanguageFeatures {
       return undefined
     }
 
-    const instructionName = instructionMatch[1].toUpperCase()
+    const instructionName = instructionMatch[1].toLowerCase()
     const instruction = this.instructions.find(inst => inst.mnemonic === instructionName)
     
     if (!instruction) {

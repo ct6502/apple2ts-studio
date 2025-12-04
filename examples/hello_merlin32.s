@@ -1,5 +1,5 @@
 ; Simple Apple II "Hello World" program
-; This demonstrates basic 6502 assembly programming using ca65 syntax
+; This demonstrates basic 6502 assembly programming using merlin32 syntax
 
         org $0800           ; Start at $0800 (standard Apple II program location)
         TYP BIN             ; Output File Type is Binary
