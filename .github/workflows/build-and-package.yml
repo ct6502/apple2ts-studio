@@ -41,4 +41,4 @@ jobs:
       with:
         name: apple2ts-studio-${{ github.sha }}
         path: '*.vsix'
-        retention-days: 30
+        retention-days: 3

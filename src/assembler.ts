@@ -93,7 +93,7 @@ export class AssemblerService {
   private async assembleWithCl65(sourcePath: string, workspacePath: string, sourceFileName: string): Promise<[number, Uint8Array]> {
     const config = vscode.workspace.getConfiguration("apple2ts")
     const assemblerPath = config.get<string>("assembler.cl65Path", "cl65")
-    const assemblerArgs = config.get<string>("assembler.cl65Args", "-t none")
+    const assemblerArgs = config.get<string>("assembler.cl65Args", "--target apple2enh --config apple2enh-asm.cfg")
     if (!this.checkToolExists(assemblerPath)) {
       throw new Error(`cl65 assembler not found at path: ${assemblerPath}`)
     }

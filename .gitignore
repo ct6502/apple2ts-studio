@@ -25,3 +25,4 @@ coverage/
 # Compiled 6502 files
 *.bin
 examples/*.txt
+examples/*.o

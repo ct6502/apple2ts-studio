@@ -153,7 +153,7 @@
         "apple2ts.assembler.cl65Args": {
           "order": 22,
           "type": "string",
-          "default": "-t none",
+          "default": "--target apple2enh --config apple2enh-asm.cfg",
           "description": "Arguments for cl65 compiler/linker"
         },
         "apple2ts.assembler.merlinPath": {
