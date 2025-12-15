@@ -2,6 +2,7 @@ import * as vscode from "vscode"
 import { EmulatorPanel } from "./emulatorPanel"
 import { AssemblerService } from "./assembler"
 import { LanguageFeatures } from "./languageFeatures"
+import * as fs from "fs"
 
 let emulatorPanel: EmulatorPanel
 let assemblerService: AssemblerService
@@ -24,7 +25,7 @@ export function activate(context: vscode.ExtensionContext) {
     emulatorPanel.createOrShow(context, false)
   })
 
-  const buildAndRunCommand = vscode.commands.registerCommand("apple2ts.buildAndRun", async () => {
+  const buildAndRunAssemblyCommand = vscode.commands.registerCommand("apple2ts.buildAndRunAssembly", async () => {
     const activeEditor = vscode.window.activeTextEditor
     if (!activeEditor) {
       vscode.window.showWarningMessage("No active editor found. Please open a 6502 assembly file (.s, .asm, or .a65)")
@@ -44,7 +45,7 @@ export function activate(context: vscode.ExtensionContext) {
       const [address, binary] = await assemblerService.assembleFile(activeEditor.document.uri)
       
       // Show emulator and load the program
-      emulatorPanel.loadProgram(address, binary, "bin")
+      emulatorPanel.loadAssemblyProgram(address, binary, "bin")
       emulatorPanel.createOrShow(context, true)
       
       vscode.window.showInformationMessage(`Program assembled successfully! ${binary.length} bytes loaded into emulator.`)
@@ -75,11 +76,42 @@ export function activate(context: vscode.ExtensionContext) {
     }
   })
 
+  const buildAndRunBasicCommand = vscode.commands.registerCommand("apple2ts.buildAndRunBasic", async () => {
+    const activeEditor = vscode.window.activeTextEditor
+    if (!activeEditor) {
+      vscode.window.showWarningMessage("No active editor found. Please open a BASIC file (.bas)")
+      return
+    }
+
+    if (activeEditor.document.languageId !== "apple2ts6502") {
+      vscode.window.showWarningMessage("Current file is not a BASIC file. Make sure the file has extension .bas")
+      return
+    }
+
+    try {
+      // Save the file first
+      await activeEditor.document.save()
+
+      // Read file content as string
+      const source = await fs.promises.readFile(activeEditor.document.uri.fsPath, "utf8")
+      
+      // Show emulator and load the program
+      emulatorPanel.loadBasicProgram(source)
+      emulatorPanel.createOrShow(context, false)
+      
+      vscode.window.showInformationMessage(`Program run successfully! ${source.length} bytes loaded into emulator.`)
+    } catch (error) {
+      vscode.window.showErrorMessage(`Assembly failed: ${error}`)
+      console.error("Assembly error:", error)
+    }
+  })
+
   // Add commands to subscription list
   context.subscriptions.push(
     launchEmulatorCommand,
-    buildAndRunCommand,
-    assembleFileCommand
+    buildAndRunAssemblyCommand,
+    assembleFileCommand,
+    buildAndRunBasicCommand
   )
 
   // Register status bar item

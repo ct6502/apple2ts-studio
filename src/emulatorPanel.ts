@@ -13,6 +13,7 @@ export class EmulatorPanel {
   private format = "bin"
   private runProgram = true
   private outputChannel: vscode.OutputChannel
+  private basic = ""
 
   constructor(extensionUri: vscode.Uri, outputChannel: vscode.OutputChannel) {
     this.extensionUri = extensionUri
@@ -72,16 +73,20 @@ export class EmulatorPanel {
     this.update(context, loadCode)
   }
 
-  public loadProgram(address: number, binary: Uint8Array, format: string) {
+  public loadAssemblyProgram(address: number, binary: Uint8Array, format: string) {
     this.address = address
     this.binary = binary
     this.format = format
     // if (this.panel) {
     //   this.panel.webview.postMessage({
-    //     command: 'loadProgram',
+    //     command: 'loadAssemblyProgram',
     //     data: Array.from(binary)
     //   })
     // }
+  }
+
+  public loadBasicProgram(source: string) {
+    this.basic = source
   }
 
   public dispose() {
@@ -112,8 +117,14 @@ export class EmulatorPanel {
     const config = vscode.workspace.getConfiguration("apple2ts")
     const appMode = config.get<string>("emulator.appmode", "game")
     const theme = config.get<string>("emulator.theme", "dark")
-    const url = `${protocol}://${baseURL}?appmode=${appMode}&theme=${theme}`
+    let url = `${protocol}://${baseURL}?appmode=${appMode}&theme=${theme}`
     const origin = `${protocol}://${baseURL}`
+
+    if (this.basic) {
+      url += `&text=${encodeURIComponent(this.basic)}`
+      url += "&run=true"
+    }
+
     this.outputChannel.appendLine(`URL: ${url}`)
     this.outputChannel.appendLine(`Origin: ${origin}`)
 

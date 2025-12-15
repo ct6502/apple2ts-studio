@@ -53,7 +53,8 @@
         "extensions": [
           ".s",
           ".asm",
-          ".a65"
+          ".a65",
+          ".bas"
         ],
         "configuration": "./language-configuration.json"
       }
@@ -72,7 +73,12 @@
         "category": "Apple2TS"
       },
       {
-        "command": "apple2ts.buildAndRun",
+        "command": "apple2ts.buildAndRunAssembly",
+        "title": "Build & Run in Emulator",
+        "category": "Apple2TS"
+      },
+      {
+        "command": "apple2ts.buildAndRunBasic",
         "title": "Build & Run in Emulator",
         "category": "Apple2TS"
       },
@@ -84,16 +90,26 @@
     ],
     "keybindings": [
       {
-        "command": "apple2ts.buildAndRun",
+        "command": "apple2ts.buildAndRunAssembly",
         "key": "f5",
         "when": "resourceExtname == .s || resourceExtname == .asm || resourceExtname == .a65"
+      },
+      {
+        "command": "apple2ts.buildAndRunBasic",
+        "key": "f5",
+        "when": "resourceExtname == .bas"
       }
     ],
     "menus": {
       "editor/context": [
         {
-          "command": "apple2ts.buildAndRun",
+          "command": "apple2ts.buildAndRunAssembly",
           "when": "resourceExtname == .s || resourceExtname == .asm || resourceExtname == .a65",
+          "group": "apple2ts"
+        },
+        {
+          "command": "apple2ts.buildAndRunBasic",
+          "when": "resourceExtname == .bas",
           "group": "apple2ts"
         }
       ]
