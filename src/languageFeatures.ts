@@ -108,7 +108,7 @@ export class LanguageFeatures {
   public register(context: vscode.ExtensionContext) {
     // Register completion provider
     const completionProvider = vscode.languages.registerCompletionItemProvider(
-      "apple2ts6502",
+      "apple2ts6502Assembly",
       {
         provideCompletionItems: (document: vscode.TextDocument, position: vscode.Position) => {
           return this.provideCompletionItems(document, position)
@@ -119,7 +119,7 @@ export class LanguageFeatures {
 
     // Register hover provider
     const hoverProvider = vscode.languages.registerHoverProvider(
-      "apple2ts6502",
+      "apple2ts6502Assembly",
       {
         provideHover: (document: vscode.TextDocument, position: vscode.Position) => {
           return this.provideHover(document, position)
@@ -129,7 +129,7 @@ export class LanguageFeatures {
 
     // Register signature help provider
     const signatureHelpProvider = vscode.languages.registerSignatureHelpProvider(
-      "apple2ts6502",
+      "apple2ts6502Assembly",
       {
         provideSignatureHelp: (document: vscode.TextDocument, position: vscode.Position) => {
           return this.provideSignatureHelp(document, position)

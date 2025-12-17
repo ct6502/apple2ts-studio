@@ -1,0 +1,19 @@
+{
+  "name": "Applesoft BASIC",
+  "scopeName": "source.basic.6502",
+  "patterns": [
+    {
+      "include": "#comments"
+    }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.rem.basic",
+          "match": "REM.*$"
+        }
+      ]
+    }
+  }
+}

@@ -32,7 +32,7 @@ export function activate(context: vscode.ExtensionContext) {
       return
     }
 
-    if (activeEditor.document.languageId !== "apple2ts6502") {
+    if (activeEditor.document.languageId !== "apple2ts6502Assembly") {
       vscode.window.showWarningMessage("Current file is not a 6502 assembly file. Make sure the file has extension .s, .asm, or .a65")
       return
     }
@@ -62,7 +62,7 @@ export function activate(context: vscode.ExtensionContext) {
       return
     }
 
-    if (activeEditor.document.languageId !== "apple2ts6502") {
+    if (activeEditor.document.languageId !== "apple2ts6502Assembly") {
       vscode.window.showWarningMessage("Current file is not a 6502 assembly file")
       return
     }
@@ -83,7 +83,7 @@ export function activate(context: vscode.ExtensionContext) {
       return
     }
 
-    if (activeEditor.document.languageId !== "apple2ts6502") {
+    if (activeEditor.document.languageId !== "apple2ts6502Basic") {
       vscode.window.showWarningMessage("Current file is not a BASIC file. Make sure the file has extension .bas")
       return
     }
@@ -121,6 +121,11 @@ export function activate(context: vscode.ExtensionContext) {
   statusBarItem.tooltip = "Launch Apple2TS Emulator"
   statusBarItem.show()
   context.subscriptions.push(statusBarItem)
+
+  // Remove line numbers for BASIC
+  vscode.workspace
+    .getConfiguration()
+    .update("editor.lineNumbers", "off", vscode.ConfigurationTarget.Global);
 }
 
 export function deactivate() {

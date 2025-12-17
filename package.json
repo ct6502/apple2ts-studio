@@ -45,15 +45,25 @@
   "contributes": {
     "languages": [
       {
-        "id": "apple2ts6502",
+        "id": "apple2ts6502Assembly",
         "aliases": [
           "Apple2TS 6502 Assembly",
-          "apple2ts6502"
+          "apple2ts6502Assembly"
         ],
         "extensions": [
           ".s",
           ".asm",
-          ".a65",
+          ".a65"
+        ],
+        "configuration": "./language-configuration.json"
+      },
+      {
+        "id": "apple2ts6502Basic",
+        "aliases": [
+          "Apple2TS 6502 Basic",
+          "apple2ts6502Basic"
+        ],
+        "extensions": [
           ".bas"
         ],
         "configuration": "./language-configuration.json"
@@ -61,9 +71,14 @@
     ],
     "grammars": [
       {
-        "language": "apple2ts6502",
+        "language": "apple2ts6502Assembly",
         "scopeName": "source.assembly.6502",
-        "path": "./syntaxes/apple2ts6502.tmGrammar.json"
+        "path": "./syntaxes/apple2ts6502Assembly.tmGrammar.json"
+      },
+      {
+        "language": "apple2ts6502Basic",
+        "scopeName": "source.basic.6502",
+        "path": "./syntaxes/apple2ts6502Basic.tmGrammar.json"
       }
     ],
     "commands": [
