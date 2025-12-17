@@ -19,8 +19,8 @@
     "numbers": {
       "patterns": [
         {
-          "name": "constant.line.number",
-          "match": "\\b[0-9]+\\b"
+          "name": "constant.numeric.line",
+          "match": "^[0-9]+\\b"
         }
       ]
     },
