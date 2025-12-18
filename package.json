@@ -93,13 +93,18 @@
         "category": "Apple2TS"
       },
       {
+        "command": "apple2ts.assembleFile",
+        "title": "Assemble Current File",
+        "category": "Apple2TS"
+      },
+      {
         "command": "apple2ts.buildAndRunBasic",
         "title": "Build & Run in Emulator",
         "category": "Apple2TS"
       },
       {
-        "command": "apple2ts.assembleFile",
-        "title": "Assemble Current File",
+        "command": "apple2ts.gotoline",
+        "title": "Go to BASIC line number",
         "category": "Apple2TS"
       }
     ],
@@ -112,6 +117,11 @@
       {
         "command": "apple2ts.buildAndRunBasic",
         "key": "f5",
+        "when": "resourceExtname == .bas"
+      },
+      {
+        "command": "apple2ts.gotoline",
+        "key": "ctrl-g",
         "when": "resourceExtname == .bas"
       }
     ],

@@ -13,6 +13,9 @@
     },
     {
       "include": "#instructions"
+    },
+    {
+      "include": "#operators"
     }
   ],
   "repository": {
@@ -52,6 +55,14 @@
         {
           "name": "keyword.mnemonic.basic",
           "match": "(?i)\\b(abs|and|asc|atn|call|chr\\$|clear|color|cont|cos|data|deffn|del|dim|draw|end|exp|flash|for|get|gosub|goto|gr|hcolor|hgr|hgr2|himem|hlin|home|hplot|htab|if|in#\\d|input|int|inverse|left\\$|len|let|list|load|log|lomem|mid\\$|new|next|normal|not|notrace|on|onerr|or|pdl|peek|plot|poke|pop|pos|pre|print|read|recall|rem|restore|resume|return|right\\$|rnd|rot|run|save|scale|scrn|sgn|shload|sin|spc|speed|sqr|step|stop|store|str|tan|then|to|trace|usr|val|vlin|vtab|wait|xdraw)\\b"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "entity.name.operator",
+          "match": "\\b[\\+\\-\\*\\/\\^\\=]\\b"
         }
       ]
     }

@@ -106,6 +106,30 @@ export function activate(context: vscode.ExtensionContext) {
     }
   })
 
+  let disposable = vscode.commands.registerCommand("apple2ts.gotoline", () => {
+    
+		vscode.window.showInputBox({
+        prompt: 'Type a BASIC line number to go to.'
+    })
+    .then(line => {
+			if (!line) { return; }
+			let editor = vscode.window.activeTextEditor;
+			if (!editor) { return; }
+
+      const regex = RegExp(`^${line}\\b`)
+      const lines = editor.document.getText().split("\n");
+      for (let i=0; i<lines.length; i++) {
+        if (regex.test(lines[i])) {
+          let range = editor.document.lineAt(i).range;
+          editor.selection = new vscode.Selection(range.start, range.start);
+          editor.revealRange(range);
+          break
+        }
+      }
+		});
+	});
+	context.subscriptions.push(disposable);
+
   // Add commands to subscription list
   context.subscriptions.push(
     launchEmulatorCommand,
